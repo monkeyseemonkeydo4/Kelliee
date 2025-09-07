@@ -24,7 +24,6 @@
     height: 100%;
     object-fit: cover;
     z-index: -2;
-    background: url('fallback.jpg') center center / cover no-repeat; /* fallback */
   }
 
   /* Overlay container */
@@ -72,15 +71,35 @@
   @keyframes fall {
     to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
   }
+
+  /* Click overlay */
+  #play-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-size: 2em;
+  }
 </style>
 </head>
 <body>
 
 <!-- Video background -->
-<video autoplay muted loop playsinline id="video-background">
-  <source src="monkey_happy_birthday.mp4" type="video/mp4">
+<video id="video-background">
+  <source src="https://drive.google.com/uc?export=download&id=1m9RiN3Y27h6SM0NHEeqvowX2RlMdr8FW" type="video/mp4">
   Your browser does not support the video tag.
 </video>
+
+<!-- Click-to-play overlay -->
+<div id="play-overlay">▶ Click to Play 🎉</div>
 
 <!-- Overlay text -->
 <div class="overlay">
@@ -91,18 +110,29 @@
   <div class="line">Ooh Ooh Ah Ah 🎉</div>
 </div>
 
-<!-- Optional monkey scream audio -->
-<audio id="monkey-audio" autoplay>
+<!-- Monkey scream audio -->
+<audio id="monkey-audio">
   <source src="monkey_screams.mp3" type="audio/mpeg">
 </audio>
 
 <script>
+  const video = document.getElementById('video-background');
+  const overlay = document.getElementById('play-overlay');
+  const monkeyAudio = document.getElementById('monkey-audio');
+
+  // Click-to-play video with sound
+  overlay.addEventListener('click', () => {
+    video.play();
+    monkeyAudio.play();
+    overlay.style.display = 'none';
+  });
+
   // Animate text line by line
   const lines = document.querySelectorAll('.line');
   lines.forEach((line, index) => {
     setTimeout(() => {
       line.style.opacity = 1;
-    }, index * 2000);
+    }, index * 2000); // 2 sec delay between lines
   });
 
   // Floating bananas
